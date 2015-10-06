@@ -6,6 +6,21 @@
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.js"></script>
     <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.2.12.min.js"></script>
     <script type="text/javascript">
+      var WHITE = 'rgb(255, 255, 255)';
+      function randByte() {
+        return Math.floor(Math.random() * 256);
+      }
+      function randomColor() {
+        return 'rgb('+randByte()+', '+randByte()+', '+randByte()+')';
+      }
+      function handleCellClick(e) {
+        var cell = $(e.srcElement);
+        if (cell.css('background-color') == WHITE) {
+          cell.css('background-color', randomColor());
+        } else {
+          cell.css('background-color', WHITE);
+        }
+      }
       function handleReset(e) {
         var form = $(e.srcElement);
         $('#thetable').empty();
@@ -18,7 +33,7 @@
         for (var y = height - 1; y >= 0; y--) {
           var row = '';
           for (var x = width - 1; x >= 0; x--) {
-            row += '<td></td>';
+            row += '<td style="background-color: white" onClick="return handleCellClick(event)"></td>';
           }
           $('#thetable').append('<tr>'+row+'</tr>');
         }
