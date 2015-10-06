@@ -5,6 +5,7 @@
     <title>Color Grid</title>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.js"></script>
     <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.2.12.min.js"></script>
+    <script type="text/javascript" src="uri.js"></script>
     <script type="text/javascript">
       var WHITE = 'rgb(255, 255, 255)';
       Parse.initialize('pryvUUiLmHRSIuAXpkYZufyocEDmYYtCLiKsgveu', '20pJ8dbgKgriZeHMlcELf3VC2nln0ii0bwtdJqxO');
@@ -60,13 +61,14 @@
         savedBoard.save(board, {
           success: function (object) {
             console.log(object);
-            alert('successfully saved!');
-
+            var div = $('#saveresults');
+            div.empty();
+            div.append('Saved with id ' + object.id);
           },
           error: function (model, error) {
-            console.log(model);
-            alert('There was an error saving: '+error);
-
+            var div = $('#saveresults');
+            div.empty();
+            div.append('There was an error saving: ' + error);
           }
         });
         return false;
@@ -93,5 +95,7 @@
     <form onsubmit="return saveBoard(event)">
       <input name="Submit" type="submit" value="Save" />
     </form>
+    <div id="saveresults">
+    </div>
   </body>
 </html>
