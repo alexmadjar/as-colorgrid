@@ -43,6 +43,29 @@
         }
         return false;
       }
+      function setGridColors(colors) {
+        $('#thetable').children('tbody').children('tr').each(function (index) {
+          $(this).children('td').each(function (i) {
+            $(this).css('background-color', colors.shift());
+          });
+        });
+      }
+      function loadBoard(boardServerObj) {
+        var board = boardServerObj.attributes;
+        $('#height').val(board.y);
+        $('#width').val(board.x);
+        handleReset({srcElement: $('#resetform')});
+        setGridColors(board.colors);
+      }
+      function loadBoardFromID(id) {
+        var query = new Parse.Query(Board);
+        query.get(id, {
+          success: loadBoard,
+          error: function(obj, error) {
+            alert('Failed to fetch board with id ' + id);
+          }
+        });
+      }
       function saveBoard(e) {
         var rows = 0;
         var colors = [];
@@ -63,7 +86,10 @@
             console.log(object);
             var div = $('#saveresults');
             div.empty();
-            div.append('Saved with id ' + object.id);
+            var link = URI('?')
+              .addSearch('id', object.id)
+              .toString();
+            div.append('Saved with id <a href="' + link + '">' + object.id + '</a>');
           },
           error: function (model, error) {
             var div = $('#saveresults');
@@ -72,6 +98,11 @@
           }
         });
         return false;
+      }
+
+      var GET = URI(document.URL).query(true);
+      if (GET.id) {
+        loadBoardFromID(GET.id);
       }
 
     </script>
@@ -84,10 +115,10 @@
   </head>
   <body>
     Give me a new grid that is
-    <form onSubmit="return handleReset(event)">
-      <input type="text" name="width" value="5" />
+    <form onSubmit="return handleReset(event)" id="resetform">
+      <input type="text" id="width" name="width" value="5" />
       by
-      <input type="text" name="height" value="3" />
+      <input type="text" id="height" name="height" value="3" />
       <input name="Submit"  type="submit" value="Reset" />
     </form>
     <table style="width:100%" id="thetable">
