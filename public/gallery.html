@@ -1,0 +1,53 @@
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Color Grid</title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.js"></script>
+    <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.2.12.min.js"></script>
+    <script type="text/javascript" src="uri.js"></script>
+    <script type="text/javascript">
+      Parse.initialize('pryvUUiLmHRSIuAXpkYZufyocEDmYYtCLiKsgveu', '20pJ8dbgKgriZeHMlcELf3VC2nln0ii0bwtdJqxO');
+      var Board = Parse.Object.extend('Board');
+      var query = new Parse.Query(Board);
+      var allBoards = query.find({
+        success: function(result) {
+          appendRow('Grid ID', 'Size', 'Date Created');
+          for (var i = 0; i < result.length; i++) {
+            addGrid(result[i]);
+          }
+        },
+        error: function() {
+          var table = $('#thetable');
+          table.empty();
+          table.append('There was a network error :(');
+        }
+      });
+      function addGrid(dbObject) {
+        var link = URI('index.html?')
+          .addSearch('id', dbObject.id)
+          .toString();
+        link = '<a target="_blank" href="' + link + '">' + dbObject.id + '</a>';
+        appendRow(
+          link,
+          dbObject.attributes.x+' x '+dbObject.attributes.y,
+          dbObject.createdAt
+        );
+      }
+      function appendRow(id, size, date) {
+        $('#thetable').append(
+          '<tr>'
+          +'<td>'+id+'</td>'
+          +'<td>'+size+'</td>'
+          +'<td>'+date+'</td>'
+          +'</tr>'
+        );
+      }
+    </script>
+  </head>
+  <body>
+    <h1>All Saved Grids</h1>
+    <table style="width:100%" id="thetable">
+    </table>
+  </body>
+</html>
