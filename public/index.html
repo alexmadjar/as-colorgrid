@@ -7,6 +7,9 @@
     <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.2.12.min.js"></script>
     <script type="text/javascript">
       var WHITE = 'rgb(255, 255, 255)';
+      Parse.initialize('pryvUUiLmHRSIuAXpkYZufyocEDmYYtCLiKsgveu', '20pJ8dbgKgriZeHMlcELf3VC2nln0ii0bwtdJqxO');
+      var Board = Parse.Object.extend('Board');
+
       function randByte() {
         return Math.floor(Math.random() * 256);
       }
@@ -39,6 +42,36 @@
         }
         return false;
       }
+      function saveBoard(e) {
+        var rows = 0;
+        var colors = [];
+        $('#thetable').children('tbody').children('tr').each(function (index) {
+          rows++;
+          $(this).children('td').each(function (i) {
+            colors.push($(this).css('background-color'));
+          });
+        });
+        var board = {
+          x: colors.length / rows,
+          y: rows,
+          colors: colors
+        };
+        var savedBoard = new Board();
+        savedBoard.save(board, {
+          success: function (object) {
+            console.log(object);
+            alert('successfully saved!');
+
+          },
+          error: function (model, error) {
+            console.log(model);
+            alert('There was an error saving: '+error);
+
+          }
+        });
+        return false;
+      }
+
     </script>
     <style>
     td {
@@ -50,12 +83,15 @@
   <body>
     Give me a new grid that is
     <form onSubmit="return handleReset(event)">
-      <input type="text" name="width" value="5">
+      <input type="text" name="width" value="5" />
       by
-      <input type="text" name="height" value="3">
+      <input type="text" name="height" value="3" />
       <input name="Submit"  type="submit" value="Reset" />
     </form>
     <table style="width:100%" id="thetable">
     </table>
+    <form onsubmit="return saveBoard(event)">
+      <input name="Submit" type="submit" value="Save" />
+    </form>
   </body>
 </html>
