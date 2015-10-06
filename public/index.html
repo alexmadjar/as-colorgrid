@@ -5,6 +5,26 @@
     <title>Color Grid</title>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.js"></script>
     <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.2.12.min.js"></script>
+    <script type="text/javascript">
+      function handleReset(e) {
+        var form = $(e.srcElement);
+        $('#thetable').empty();
+        var height = parseInt(form.find('[name=height]').val());
+        var width = parseInt(form.find('[name=width]').val());
+        if (!height || !width || width < 0 || height < 0) {
+          alert('Don\'t be a poop: enter positive numbers!');
+          return false;
+        }
+        for (var y = height - 1; y >= 0; y--) {
+          var row = '';
+          for (var x = width - 1; x >= 0; x--) {
+            row += '<td></td>';
+          }
+          $('#thetable').append('<tr>'+row+'</tr>');
+        }
+        return false;
+      }
+    </script>
     <style>
     td {
       border: 1px solid black;
@@ -13,34 +33,14 @@
     </style>
   </head>
   <body>
-    Give me a grid that is
-    <form>
-    <input type="text" name="width" value="5">
-    by
-    <input type="text" name="height" value="3">
+    Give me a new grid that is
+    <form onSubmit="return handleReset(event)">
+      <input type="text" name="width" value="5">
+      by
+      <input type="text" name="height" value="3">
+      <input name="Submit"  type="submit" value="Reset" />
     </form>
-    <table style="width:100%">
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
+    <table style="width:100%" id="thetable">
     </table>
   </body>
 </html>
