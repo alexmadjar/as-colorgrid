@@ -1,0 +1,10 @@
+{
+  "applications": {
+    "Color Grid": {
+      "applicationId": "pryvUUiLmHRSIuAXpkYZufyocEDmYYtCLiKsgveu"
+    },
+    "_default": {
+      "link": "Color Grid"
+    }
+  }
+}
